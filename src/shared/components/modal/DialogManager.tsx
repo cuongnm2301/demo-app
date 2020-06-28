@@ -77,7 +77,7 @@ class DialogManager {
         )
     }
 
-    show = (props: any, callback: any, modalId?: number) => {
+    show = (props: any, callback?: any, modalId?: number) => {
         modalId = modalId || this.modalElements.length
         this.add(
             {
