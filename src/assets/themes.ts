@@ -1,13 +1,14 @@
 const common = {
     white: '#fff',
     transparent: 'transparent',
+    black: '#000',
 }
 
 const Light = {
     COLORS: {
         ...common,
-        primary: '#607d8b',
-        secondary: '#607d8b',
+        primary: '#ffffff',
+        secondary: '#E9ECEF',
         textPrimary: '#000000',
         textSecondary: '#607d8b',
     },

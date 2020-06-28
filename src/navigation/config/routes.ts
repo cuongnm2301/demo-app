@@ -6,6 +6,25 @@ const ROOT_STACK = {
 
 const APP_ROUTE = {
     HOME: 'HOME',
+    MAIN_TAB: 'MAIN_TAB',
 }
 
-export { ROOT_STACK, APP_ROUTE }
+const HOME_ROUTE = {
+    ROOT: 'HOME_ROOT',
+}
+
+const SETTING_ROUTE = {
+    ROOT: 'SETTING_ROOT',
+}
+
+const NOTIFICATION_ROUTE = {
+    ROOT: 'NOTIFICATION_ROOT',
+}
+
+const TAB_NAVIGATION_ROOT = {
+    HOME_ROUTE,
+    SETTING_ROUTE,
+    NOTIFICATION_ROUTE,
+}
+
+export { ROOT_STACK, APP_ROUTE, TAB_NAVIGATION_ROOT }
