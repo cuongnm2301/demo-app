@@ -38,9 +38,7 @@ const usePaging = (url: string, params?: any) => {
             const responseApi = await requestToApi.post(
                 url,
                 {
-                    // eslint-disable-next-line @typescript-eslint/camelcase
                     page_index: pageIndex,
-                    // eslint-disable-next-line @typescript-eslint/camelcase
                     page_size: DEFAULT_PAGING,
                     ...params,
                 },
