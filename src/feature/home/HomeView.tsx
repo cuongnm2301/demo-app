@@ -65,11 +65,14 @@ const HomeView = () => {
                                     justifyContent: 'center',
                                 }}
                             >
-                                <StyledText>zxczxczcx</StyledText>
+                                <StyledText>Hello</StyledText>
                                 <Button title={'hide'} onPress={() => DialogManager.dismiss()} />
                             </View>
                         ),
                         width: 0.9,
+                        onTouchOutside: () => {
+                            DialogManager.dismiss()
+                        },
                     })
                 }
             />
