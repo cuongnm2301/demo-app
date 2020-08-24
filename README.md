@@ -1,4 +1,4 @@
-This project was development by **Amela Technology**
+This project was development by **CuongNm base on https://github.com/amela-technology/react-native-templet-v1**
 
 Below you'll find information about performing common tasks.
 
