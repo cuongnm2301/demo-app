@@ -1,15 +1,19 @@
 import React from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
-import { APP_ROUTE, TAB_NAVIGATION_ROOT } from '../config/routes'
+import { createBottomTabNavigator, BottomTabBarProps } from '@react-navigation/bottom-tabs'
 import navigationConfigs from '../config/options'
 import { Host } from 'react-native-portalize'
-
-import { createBottomTabNavigator, BottomTabBarProps } from '@react-navigation/bottom-tabs'
-
+import StyledTabBar from 'navigation/component/StyledTabBar'
+// Screen
+import LoginView from 'feature/login/LoginView'
 import HomeView from 'feature/home/HomeView'
 import NotificationView from 'feature/notification/NotificationView'
 import SettingView from 'feature/setting/Setting'
-import StyledTabBar from 'navigation/component/StyledTabBar'
+
+import { APP_ROUTE, TAB_NAVIGATION_ROOT, AUTHENTICATE_ROUTE } from '../config/routes'
+import { useSelector } from 'react-redux'
+import { RootState } from 'shared/store/rootReducer'
+import { isIos } from 'shared/utilities/helper'
 
 const MainStack = createStackNavigator()
 const MainTab = createBottomTabNavigator()
@@ -41,6 +45,14 @@ const MainTabContainer = () => {
     )
 }
 
+const AuthStack = () => {
+    return (
+        <MainStack.Navigator headerMode={'none'} screenOptions={navigationConfigs} keyboardHandlingEnabled={isIos}>
+            <MainStack.Screen name={AUTHENTICATE_ROUTE.LOGIN} component={LoginView} />
+        </MainStack.Navigator>
+    )
+}
+
 const AppStack = () => {
     return (
         <Host>
@@ -52,7 +64,12 @@ const AppStack = () => {
 }
 
 const Navigation = () => {
-    return <AppStack />
+    const authentication = useSelector((state: RootState) => state.authentication)
+    if (authentication.userToken) {
+        return <AppStack />
+    } else {
+        return <AuthStack />
+    }
 }
 
 export default Navigation

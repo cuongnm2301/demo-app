@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React, { RefObject } from 'react'
 import { StackActions } from '@react-navigation/native'
 

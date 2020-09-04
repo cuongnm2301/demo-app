@@ -26,7 +26,6 @@ const StyledPicker = (props: StyledImageProps) => {
     const arrData = props.data ? props.data.map((k: any) => k.label) : []
 
     const renderPicker = () => {
-        console.log(exits?.value)
         DialogManager.show({
             children: <View />,
             onTouchOutside: () => {

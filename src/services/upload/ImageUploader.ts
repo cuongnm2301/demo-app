@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import ImagePicker from 'react-native-image-crop-picker'
 import { awsApi } from 'services/upload/awsApi'
 // import {openSettings} from 'react-native-permissions'
@@ -88,8 +89,6 @@ class ImageUploader {
                 console.log('uploading an image....')
                 const remoteImage = await awsApi.upload(localImage?.path || localImage)
                 console.log('upload finished ....' + JSON.stringify(remoteImage))
-                // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-                // @ts-ignore
                 resolve(remoteImage?.body?.postResponse.location)
             } catch (e) {
                 reject(e)

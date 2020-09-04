@@ -39,7 +39,6 @@ const StyledModalPicker = (props: StyledImageProps) => {
     const modalize = React.useRef<Modalize>(null)
 
     const renderPicker = () => {
-        console.log('console')
         modalize.current?.open()
     }
     return (

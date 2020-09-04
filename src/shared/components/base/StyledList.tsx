@@ -44,12 +44,12 @@ const StyledList = (props: Props) => {
     }
 
     const handleRefresh = () => {
-        props.onRefresh && props.onRefresh()
+        props?.onRefresh?.()
     }
 
     const handleEndReached = (info: any) => {
         if (!momentumScrolled) {
-            props.onLoadMore && props.onLoadMore()
+            props?.onLoadMore?.()
             setMomentumScrolled(true)
         }
     }

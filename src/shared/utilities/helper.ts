@@ -4,6 +4,10 @@ export const isAndroid = () => {
     return Platform.OS === 'android'
 }
 
-export const isIos = () => {
-    return Platform.OS === 'ios'
+export const isIos = Platform.OS === 'ios'
+
+export function wait(timeout: number) {
+    return new Promise((resolve) => {
+        setTimeout(resolve, timeout)
+    })
 }

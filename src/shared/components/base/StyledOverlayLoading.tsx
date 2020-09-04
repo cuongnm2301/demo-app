@@ -68,7 +68,7 @@ export default class StyledOverlayLoading extends React.PureComponent<Props> {
         return (
             <View style={styles.background}>
                 <View style={styles.circle}>
-                    <ActivityIndicator color={Themes.COLORS.primary} size={42} style={[styles.activityIndicator]} />
+                    <ActivityIndicator color={Themes.COLORS.black} size={42} style={[styles.activityIndicator]} />
                 </View>
             </View>
         )
