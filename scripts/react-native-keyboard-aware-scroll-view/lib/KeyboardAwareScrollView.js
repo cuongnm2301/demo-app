@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unresolved */
 /* @flow */
 
 import { ScrollView } from 'react-native'

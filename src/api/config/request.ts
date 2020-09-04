@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import axios from 'axios'
 import Config from 'react-native-config'
 import i18next from 'shared/utilities/i18next'
@@ -6,7 +7,7 @@ import AuthenticateService from 'services/authenticate/AuthenticateService'
 import { AUTH_URL } from 'api/config/urls'
 const request = axios.create({
     baseURL: Config.API_URL,
-    timeout: 5000,
+    timeout: 8000,
     headers: { Accept: '*/*' },
 })
 // for multiple requests
@@ -24,29 +25,30 @@ const processQueue = (error: any, token: string | null | undefined = null) => {
 
     failedQueue = []
 }
+
 request.interceptors.request.use(
     async function (config: any) {
         // Do something before api is sent
-        const userToken = await TokenProvider.getToken()
+        const userToken = TokenProvider.getToken()
         if (userToken) {
             config.headers['Authorization'] = 'Bearer ' + userToken
         }
-        // __DEV__ &&
-        //     console.log(
-        //         `%c ${config.method?.toUpperCase()} from ${config.url}:`,
-        //         'background: ' + 'yellow' + '; color: #000',
-        //         config,
-        //     )
+        __DEV__ &&
+            console.log(
+                `%c ${config.method?.toUpperCase()} from ${config.url}:`,
+                'background: ' + 'yellow' + '; color: #000',
+                config,
+            )
         return config
     },
     function (error: any) {
         // Do something with api error
-        // __DEV__ &&
-        //     console.log(
-        //         `%c FAILED ${error.response.method?.toUpperCase()} from ${error.response.config.url}:`,
-        //         'background: ' + 'red' + '; color: #fff',
-        //         error.response,
-        //     )
+        __DEV__ &&
+            console.log(
+                `%c FAILED ${error.response.method?.toUpperCase()} from ${error.response.config.url}:`,
+                'background: ' + 'red' + '; color: #fff',
+                error.response,
+            )
         return Promise.reject(error)
     },
 )
@@ -54,32 +56,31 @@ request.interceptors.response.use(
     function (response: any) {
         // Any status code that lie within the range of 2xx cause this function to trigger
         // Do something with response data
-        // __DEV__ &&
-        //     console.log(
-        //         `%c SUCCESS ${response.config.method?.toUpperCase()} from ${response.config.url}:`,
-        //         'background: ' + 'green' + '; color: #fff',
-        //         response.data,
-        //     )
-        return response
+        __DEV__ &&
+            console.log(
+                `%c SUCCESS ${response.config.method?.toUpperCase()} from ${response.config.url}:`,
+                'background: ' + 'green' + '; color: #fff',
+                response.data,
+            )
+        return response.data
     },
     async function (error: any) {
         // Any status codes that falls outside the range of 2xx cause this function to trigger
         // Do something with response error
         const { response } = error || {}
         const { data } = response || {}
-        const { errorMessage } = data || {}
-
-        // __DEV__ &&
-        //     console.log(
-        //         `%c FAILED ${error.config?.method?.toUpperCase()} from ${error?.config?.url}:`,
-        //         'background: ' + 'red' + '; color: #fff',
-        //         error.response,
-        //     )
+        const { errorMessage, errorKey } = data || {}
+        __DEV__ &&
+            console.log(
+                `%c FAILED ${error.config?.method?.toUpperCase()} from ${error?.config?.url}:`,
+                'background: ' + 'red' + '; color: #fff',
+                error.response,
+            )
         const originalRequest = error.config
         if (errorMessage === 'RefreshToken_NotExist') {
-            // console.log('RefreshToken_NotExist => logout :(')
+            console.log('RefreshToken_NotExist => logout')
             // logout here
-            await AuthenticateService.logOut()
+            AuthenticateService.logOut()
             return Promise.reject(error)
         } else if (
             ((error.response && error.response.status === 401) || errorMessage === 'Token_Expire') &&
@@ -97,20 +98,20 @@ request.interceptors.response.use(
                         return Promise.reject(err)
                     })
             }
-            // console.log('refreshing token...')
+            console.log('refreshing token...')
             originalRequest.retry = true
             isRefreshing = true
-            const localRefreshToken = await TokenProvider.getRefreshToken()
+            const localRefreshToken = TokenProvider.getRefreshToken()
             return new Promise(function (resolve: any, reject: any) {
                 // we use pure axios when refreshing token
                 axios
                     .post(Config.API_URL + '/' + AUTH_URL.refreshToken, {
-                        refresh_token: localRefreshToken,
+                        refreshToken: localRefreshToken,
                     })
                     .then(async ({ data: response_data }: any) => {
-                        const { token, refreshToken } = response_data
-                        await TokenProvider.setAllNewToken(token, refreshToken)
-                        originalRequest.headers['Authorization'] = 'Bearer ' + refreshToken
+                        const { token, refreshToken } = response_data.data
+                        TokenProvider.setAllNewToken(token, refreshToken)
+                        originalRequest.headers['Authorization'] = 'Bearer ' + token
                         processQueue(null, token)
                         resolve(request(originalRequest))
                     })
@@ -123,7 +124,8 @@ request.interceptors.response.use(
                     })
             })
         }
-        error.message = errorMessage || i18next.t('common.errorMessage.requestFailed')
+        error.message = errorMessage || i18next.t('errorMessage.common.requestFailed')
+        error.keyMessage = errorKey || ''
         return Promise.reject(error)
     },
 )

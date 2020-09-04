@@ -31,11 +31,13 @@ module.exports = {
         '@typescript-eslint/prefer-optional-chain': 'error',
         '@typescript-eslint/unbound-method': 'off',
         '@typescript-eslint/no-unused-vars': 'off',
-        '@typescript-eslint/camelcase': 'off', 
+        '@typescript-eslint/camelcase': 'off',
         'react-hooks/rules-of-hooks': 'error',
         'react-hooks/exhaustive-deps': 0,
         'unused-imports/no-unused-imports-ts': 'error',
         'unused-imports/no-unused-vars-ts': 'off',
+        '@typescript-eslint/explicit-module-boundary-types': 'off',
+        'no-console': 1,
     },
     parserOptions: {
         ecmaVersion: 2018, // Allows for the parsing of modern ECMAScript features
