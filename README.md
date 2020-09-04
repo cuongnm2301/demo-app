@@ -34,6 +34,13 @@ Below you'll find information about performing common tasks.
 8. Run `npm run init-project` to create iOS & Android Folders.
 
 9. Run your project with `npm run android` or `npm run ios` 
+
+## Getting Started IOS
+
+1. Check workspaces of project in project/ios/${PROJECT_NAME}.xcworkspace
+2. Go to Project workspaces in Xocde delete everything except project name
+3. Should delete them in pod file 
+
 ## Available Scripts
 
 If Yarn was installed when the project was initialized, then dependencies will have been installed via Yarn, and you should probably use it to run these commands as well. Unlike dependency installation, command running syntax is identical for Yarn and NPM at the time of this writing.
