@@ -110,16 +110,18 @@ Like `npm start`, but also attempts to open your app on a connected Android devi
 │   └── splash
 │       └── SplashView.tsx
 ├── services
-│   ├── api
-│   │   ├── AuthApi.ts
-│   │   ├── CommentApi.ts
-│   │   ├── UserApi.ts
-│   │   └── config
-│   │       ├── request.ts
-│   │       └── urls.ts
-│   └── navigation
+│   └── api
+│       ├── AuthApi.ts
+│       ├── CommentApi.ts
+│       ├── UserApi.ts
+│       └── config
+│           ├── request.ts
+│           └── urls.ts
+└── navigation
 │       ├── NavigationHelpers.ts
 │       ├── NavigationService.ts
+|       ├── sence
+│       │   └── RootSences.ts
 │       └── config
 │           ├── AppContainer.ts
 │           ├── routes.ts
@@ -136,7 +138,6 @@ Like `npm start`, but also attempts to open your app on a connected Android devi
 │   │       ├── StyledTouchable.tsx
 │   │       └── index.ts
 │   ├── hooks
-│   │   ├── NavigationHooks.ts
 │   │   ├── useApi.ts
 │   │   ├── useInfinityScroll.ts
 │   │   └── useInput.ts
