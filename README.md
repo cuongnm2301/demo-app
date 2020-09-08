@@ -40,6 +40,12 @@ Below you'll find information about performing common tasks.
 1. Check workspaces of project in project/ios/${PROJECT_NAME}.xcworkspace
 2. Go to Project workspaces in Xocde delete everything except project name
 3. Should delete them in pod file 
+4. Setup react-native config following guide: https://docs.google.com/document/d/1EGlP-Z0OAfJ0n6DIHD1iQEFvZFulwKvD/edit
+
+## Getting Started Android
+
+1. Setup modalize following guide: https://jeremybarbet.github.io/react-native-modalize/#/INSTALLATION
+2. Setup react-native config following guide: https://docs.google.com/document/d/1EGlP-Z0OAfJ0n6DIHD1iQEFvZFulwKvD/edit
 
 ## Available Scripts
 
