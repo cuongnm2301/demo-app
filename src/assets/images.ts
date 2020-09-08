@@ -9,6 +9,10 @@ const Images = {
             notification: require('../assets/icon/ic_notification.png'),
             setting: require('../assets/icon/ic_setting.png'),
         },
+        radio: {
+            check: require('../assets/icon/ic_check_radio.png'),
+            uncheck: require('../assets/icon/ic_uncheck_radio.png'),
+        },
     },
     photo: {},
 }
