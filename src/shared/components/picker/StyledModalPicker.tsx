@@ -1,114 +1,117 @@
+/* eslint-disable react/display-name */
 import React from 'react'
 import { ScaledSheet } from 'react-native-size-matters'
-import { StyledText, StyledIcon } from '../base'
-import {
-    View,
-    ImageSourcePropType,
-    StyleProp,
-    ViewStyle,
-    TouchableOpacity,
-    Text,
-    Image,
-    Dimensions,
-} from 'react-native'
+import { StyledText, StyledIcon, StyledTouchable } from '../base'
+import { View, ImageSourcePropType, StyleProp, ViewStyle, TouchableOpacity, Dimensions, TextStyle } from 'react-native'
 import { Themes } from 'assets/themes'
 import { Modalize } from 'react-native-modalize'
 import { Portal } from 'react-native-portalize'
+import Images from 'assets/images'
 
 const { height } = Dimensions.get('window')
 
 interface PickerData {
-    label: string
-    value: string | number
+    id: string | number
+    name: string | number
 }
 
 interface StyledImageProps {
     title?: string
     value: string | number
     customStyle?: StyleProp<ViewStyle>
+    customTitleStyle?: StyleProp<TextStyle>
     icon?: ImageSourcePropType
     data: Array<PickerData>
-    onChangeValue(value: string | number): void
+    onChangeValue(label: string | number, value?: string | number): void
 }
 
+const PickerItem = ({ check, onChange, label }: { check: boolean; onChange?(): void; label: string }) => {
+    return (
+        <View style={styles.pickerItemContainer}>
+            <TouchableOpacity style={styles.pickerItemBtn} onPress={onChange} activeOpacity={0.6}>
+                <StyledIcon
+                    source={check ? Images.icons.radio.check : Images.icons.radio.uncheck}
+                    size={20}
+                    customStyle={{
+                        tintColor: check ? Themes.COLORS.black : 'gray',
+                        marginRight: 15,
+                    }}
+                />
+                <StyledText
+                    numberOfLines={1}
+                    customStyle={{
+                        fontSize: 16,
+                        color: check ? Themes.COLORS.black : 'gray',
+                    }}
+                >
+                    {label}
+                </StyledText>
+            </TouchableOpacity>
+        </View>
+    )
+}
+
+const MemoPickerItem = React.memo(PickerItem)
+
 const StyledModalPicker = (props: StyledImageProps) => {
-    const exits: PickerData | undefined = props.data.find((k: PickerData) => k.value === props.value)
-    const exitsLabel: string = exits ? exits.label : props.data.length > 0 ? props.data[0].label : ''
-    const exitsValue: string | number = exits ? exits.value : props.data.length > 0 ? props.data[0].value : ''
+    const exits: PickerData | undefined = props.data.find((k: PickerData) => k?.id === props?.value)
+    const exitsLabel: string | number = exits ? exits.name : props.data.length > 0 ? props.data[0].name : ''
+    const exitsValue: string | number = exits ? exits.id : props.data.length > 0 ? props.data[0].id : ''
 
     const modalize = React.useRef<Modalize>(null)
+    const contentRef = React.useRef<any>(null)
 
     const renderPicker = () => {
         modalize.current?.open()
     }
+
     return (
         <View style={props.customStyle}>
-            {props.title ? <StyledText>{props.title}</StyledText> : null}
-            <TouchableOpacity style={styles.content} onPress={renderPicker}>
-                <StyledText>{exitsLabel.toString()}</StyledText>
-                {props.icon ? <StyledIcon source={props.icon} size={14} /> : null}
-            </TouchableOpacity>
+            {props.title ? (
+                <StyledText customStyle={[styles.title, props.customTitleStyle]}>{props.title}</StyledText>
+            ) : null}
+            <StyledTouchable customStyle={styles.content} onPress={renderPicker}>
+                <StyledText>{exitsLabel?.toString() || ''}</StyledText>
+                <StyledIcon source={props.icon ? props.icon : Images.icons.selected} size={13} />
+            </StyledTouchable>
             <Portal>
                 <Modalize
                     ref={modalize}
+                    contentRef={contentRef}
                     HeaderComponent={() => {
                         return (
-                            <View
-                                style={{
-                                    paddingVertical: 15,
-                                    marginHorizontal: 15,
-                                    borderBottomColor: '#eee',
-                                    borderBottomWidth: 1,
-                                }}
-                            >
-                                <Text style={{ fontSize: 15, fontWeight: '200' }}>{props.title}</Text>
+                            <View style={styles.headerContainer}>
+                                <StyledText style={styles.headerTitle}>{props?.title || ''}</StyledText>
                             </View>
                         )
                     }}
-                    modalHeight={height * 0.6}
-                >
-                    <View style={{ paddingHorizontal: 15 }}>
-                        {props.data.map((item: PickerData) => {
+                    FooterComponent={() => {
+                        return <View style={{ height: 50 }} />
+                    }}
+                    adjustToContentHeight={props.data.length < 12}
+                    withHandle={false}
+                    modalHeight={props.data.length > 12 ? height * 0.6 : undefined}
+                    flatListProps={{
+                        data: props.data,
+                        keyExtractor: (item: PickerData) => item?.id.toString(),
+                        renderItem: ({ item }: { item: PickerData }) => {
                             return (
-                                <TouchableOpacity
-                                    style={{
-                                        flexDirection: 'row',
-                                        alignItems: 'center',
-                                        paddingVertical: 15,
-                                        borderBottomColor: '#f9f9f9',
-                                        borderBottomWidth: 1,
+                                <MemoPickerItem
+                                    check={exitsValue === item.id}
+                                    onChange={() => {
+                                        props.onChangeValue(item?.name, item?.id)
+                                        modalize.current?.close()
                                     }}
-                                    key={item.value}
-                                    onPress={() => {
-                                        props.onChangeValue(item.value)
-                                    }}
-                                >
-                                    <View
-                                        style={{
-                                            width: 35,
-                                            height: 35,
-                                            marginRight: 15,
-                                            overflow: 'hidden',
-                                            backgroundColor: '#eee',
-                                            borderRadius: 26,
-                                        }}
-                                    >
-                                        {exitsValue === item.value ? (
-                                            <Image
-                                                style={{ width: '100%', height: '100%' }}
-                                                source={{
-                                                    uri:
-                                                        'https://icons.iconarchive.com/icons/paomedia/small-n-flat/512/sign-check-icon.png',
-                                                }}
-                                            />
-                                        ) : null}
-                                    </View>
-                                    <Text style={{ fontSize: 16 }}>{item.label}</Text>
-                                </TouchableOpacity>
+                                    label={item.name.toString()}
+                                />
                             )
-                        })}
-                    </View>
-                </Modalize>
+                        },
+                        contentContainerStyle: { paddingHorizontal: 15 },
+                        initialScrollIndex: props.data.findIndex((k: PickerData) => k?.id === exitsValue),
+                        initialNumToRender: 15,
+                        getItemLayout: (data: any, index: number) => ({ length: 55, offset: 55 * index, index }),
+                    }}
+                />
             </Portal>
         </View>
     )
@@ -119,12 +122,44 @@ const styles = ScaledSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        paddingVertical: '10@vs',
         paddingHorizontal: '15@s',
         width: '100%',
-        backgroundColor: Themes.COLORS.secondary,
+        borderRadius: '36@vs',
+        paddingLeft: '15@s',
+        paddingVertical: '12@vs',
         marginTop: '5@vs',
-        borderRadius: 6,
+        color: Themes.COLORS.black,
+        borderColor: 'gray',
+        borderWidth: 1,
+    },
+    pickerItemContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingVertical: '15@vs',
+        height: 55,
+    },
+    pickerItemBtn: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        flexShrink: 1,
+        paddingRight: '40@s',
+    },
+    headerContainer: {
+        paddingVertical: '15@vs',
+        marginHorizontal: '15@s',
+        borderBottomColor: 'gray',
+        borderBottomWidth: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    headerTitle: {
+        fontSize: 16,
+        fontWeight: '600',
+    },
+    title: {
+        color: Themes.COLORS.black,
+        marginLeft: '20@s',
     },
 })
 

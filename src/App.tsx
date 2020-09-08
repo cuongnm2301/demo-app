@@ -9,7 +9,7 @@
  */
 
 import React from 'react'
-import { ActivityIndicator, YellowBox } from 'react-native'
+import { ActivityIndicator, LogBox } from 'react-native'
 import { Provider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react'
 import { persistor, store } from './shared/store/store'
@@ -18,7 +18,7 @@ import 'shared/utilities/i18next'
 import { navigationRef } from 'navigation/NavigationService'
 import Navigation from 'navigation/sence/RootSences'
 
-YellowBox.ignoreWarnings(['Require cycle:'])
+LogBox.ignoreLogs(['Require cycle:'])
 
 const App = () => {
     return (
